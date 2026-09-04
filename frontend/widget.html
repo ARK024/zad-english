@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https: data:;">
+  <title>Zad English — Floating Widget</title>
+  <link rel="stylesheet" href="styles/widget.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="shell" id="shell">
+    <!-- Header -->
+    <div class="hdr">
+      <div class="hdr-l">
+        <span class="logo">⚡ ZAD ENGLISH</span>
+        <span class="badge-level level-B1" id="levelBadge">B1</span>
+      </div>
+      <div class="hdr-r">
+        <button class="ibtn" id="btnSoundUs" title="Pronounce US">🔊 US</button>
+        <button class="ibtn" id="btnSoundUk" title="Pronounce UK">🇬🇧 UK</button>
+        <button class="ibtn" id="btnFontDown" title="Decrease font">A−</button>
+        <button class="ibtn" id="btnFontUp" title="Increase font">A+</button>
+        <button class="ibtn" id="btnSettings" title="Open Settings & Dictionary">⚙️</button>
+        <button class="ibtn cls" id="btnClose" title="Close (Esc)">✕</button>
+      </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="prog">
+      <div class="prog-fill" id="progFill" style="width: 0%"></div>
+    </div>
+
+    <!-- Content Body -->
+    <div class="content" id="contentArea">
+      <div class="word-hero">
+        <h1 class="word-title" id="wordTitle">Loading...</h1>
+        <span class="word-pos" id="wordPos">part of speech</span>
+      </div>
+
+      <div class="phonetics-bar">
+        <span class="ipa" id="wordPhonetic">/.../</span>
+        <div class="audio-btns">
+          <button class="btn-audio" id="btnPlayAudio">▶ Listen</button>
+        </div>
+      </div>
+
+      <div class="meaning-card">
+        <div class="arabic-meaning" id="arabicMeaning">جاري التحميل...</div>
+        <div class="english-def" id="englishDef">English definition will appear here.</div>
+      </div>
+
+      <div class="example-box">
+        <div class="example-en" id="exampleEn">Example sentence in English.</div>
+        <div class="example-ar" id="exampleAr">ترجمة الجملة التوضيحية بالعربية.</div>
+      </div>
+
+      <div class="synonyms-row" id="synonymsRow" style="display: none;">
+        <span class="syn-label">Synonyms:</span>
+        <div id="synonymsList" style="display: flex; gap: 4px; flex-wrap: wrap;"></div>
+      </div>
+    </div>
+
+    <!-- Footer Controls -->
+    <div class="ftr">
+      <div class="nav-btns">
+        <button class="nbtn" id="btnPrev" title="Previous word">◀ Prev</button>
+        <span class="counter-tag" id="counterTag">0 / 0</span>
+        <button class="nbtn" id="btnNext" title="Next word">Next ▶</button>
+      </div>
+
+      <div class="actions">
+        <button class="btn-act btn-quiz" id="btnQuiz" title="Test yourself">🎯 Quiz</button>
+        <button class="btn-act btn-rev" id="btnReview" title="Review later">🔄 مراجعة</button>
+        <button class="btn-act btn-mem" id="btnMemorized" title="I memorized this">حفظتها ✅</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="tauri-shim.js"></script>
+  <script src="widget.js"></script>
+</body>
+</html>

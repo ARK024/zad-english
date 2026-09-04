@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https: data:;">
+  <title>Zad English — Quick Quiz</title>
+  <link rel="stylesheet" href="styles/quiz.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="shell">
+    <div class="hdr">
+      <div class="hdr-title">
+        <span>🎯 اختبار سريع</span>
+        <span class="streak-badge" id="streakBadge">🔥 1</span>
+      </div>
+      <button class="btn-cls" id="btnCloseQuiz">✕</button>
+    </div>
+
+    <div class="quiz-body">
+      <div>
+        <div class="question-prompt" id="qPrompt">جاري تحميل السؤال...</div>
+        <div style="text-align: center;">
+          <div class="target-badge" id="targetBadge">
+            <span id="targetWordText">...</span>
+            <button class="btn-listen" id="btnAudioQuiz" title="استمع للنطق">🔊</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="options-grid" id="optionsGrid">
+        <!-- 4 Options dynamically injected -->
+      </div>
+
+      <div class="quiz-footer">
+        <div class="feedback-msg" id="feedbackMsg">اختر الإجابة الصحيحة</div>
+        <button class="btn-next-q" id="btnNextQuiz" style="display: none;">التالي ⏭</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="tauri-shim.js"></script>
+  <script src="quiz.js"></script>
+</body>
+</html>

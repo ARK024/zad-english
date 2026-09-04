@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https: data:;">
+  <title>زاد الإنجليزية — الإعدادات والمعجم الشامل</title>
+  <link rel="stylesheet" href="styles/settings.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Sidebar Tabs -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-icon">⚡</span>
+      <span class="brand-name">زاد الإنجليزية</span>
+    </div>
+
+    <nav class="nav-tabs">
+      <button class="tab-btn active" data-tab="general">
+        <span>⚙️</span>
+        <span>الإعدادات والتوقيت</span>
+      </button>
+      <button class="tab-btn" data-tab="dictionary">
+        <span>📖</span>
+        <span>المعجم والكلمات</span>
+      </button>
+      <button class="tab-btn" data-tab="stats">
+        <span>📊</span>
+        <span>التقدم والإحصائيات</span>
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main View -->
+  <main class="main-view">
+    <div class="top-bar">
+      <h2 class="page-title" id="pageTitle">الإعدادات والتوقيت</h2>
+      <button class="btn-save" id="btnSaveConfig">حفظ التغييرات ✅</button>
+    </div>
+
+    <!-- Tab 1: General Settings -->
+    <div class="tab-content active" id="tab-general">
+      <div class="settings-grid">
+        <!-- Card 1: Level & Display -->
+        <div class="card">
+          <div class="card-title">📚 المسار التعليمي والمستوى</div>
+          
+          <div class="form-group">
+            <label for="selLevel">مستوى المفردات المستهدف (CEFR)</label>
+            <select class="form-control" id="selLevel">
+              <option value="All">جميع المستويات (All Levels)</option>
+              <option value="A1">A1 — مبتدئ (Beginner)</option>
+              <option value="A2">A2 — أساسي (Elementary)</option>
+              <option value="B1">B1 — متوسط (Intermediate)</option>
+              <option value="B2">B2 — فوق المتوسط (Upper-Intermediate)</option>
+              <option value="C1">C1 — متقدم (Advanced)</option>
+              <option value="C2">C2 — إتقان واحتراف (Mastery)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="selQuizFreq">تكرار الاختبار السريع (Quiz)</label>
+            <select class="form-control" id="selQuizFreq">
+              <option value="0">معطل (إظهار بطاقات المفردات فقط)</option>
+              <option value="3">كل 3 كلمات يظهر اختبار</option>
+              <option value="5" selected>كل 5 كلمات يظهر اختبار (موصى به)</option>
+              <option value="10">كل 10 كلمات</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Card 2: Timing -->
+        <div class="card">
+          <div class="card-title">⏱️ توقيت الظهور التلقائي</div>
+
+          <div class="form-group">
+            <label for="selInterval">فترة الظهور الدورية</label>
+            <select class="form-control" id="selInterval">
+              <option value="5">كل 5 دقائق</option>
+              <option value="10">كل 10 دقائق</option>
+              <option value="15" selected>كل 15 دقيقة (افتراضي)</option>
+              <option value="30">كل 30 دقيقة</option>
+              <option value="60">كل ساعة</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="selDuration">مدة بقاء الودجت على الشاشة</label>
+            <select class="form-control" id="selDuration">
+              <option value="15">15 ثانية</option>
+              <option value="30" selected>30 ثانية</option>
+              <option value="60">دقيقة واحدة</option>
+              <option value="0">لا يختفي (إغلاق يدوي فقط)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Card 3: Audio & Pronunciation -->
+        <div class="card">
+          <div class="card-title">🔊 النطق الصوتي (Audio)</div>
+
+          <div class="form-group">
+            <label for="selVoice">اللهجة الصوتية الافتراضية</label>
+            <select class="form-control" id="selVoice">
+              <option value="en-US" selected>🇺🇸 أمريكية (US English)</option>
+              <option value="en-GB">🇬🇧 بريطانية (UK English)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="selSpeed">سرعة النطق</label>
+            <select class="form-control" id="selSpeed">
+              <option value="0.8">بطيئة (0.8x) — ممتازة للمبتدئين</option>
+              <option value="1.0" selected>طبيعية (1.0x)</option>
+              <option value="1.2">سريعة (1.2x)</option>
+            </select>
+          </div>
+
+          <label class="form-check">
+            <input type="checkbox" id="chkAutoPronounce" checked>
+            <span>نطق الكلمة صوتياً تلقائياً بمجرد ظهور النافذة</span>
+          </label>
+        </div>
+
+        <!-- Card 4: Appearance & Position -->
+        <div class="card">
+          <div class="card-title">🎨 المظهر وموضع الشاشة</div>
+
+          <div class="form-group">
+            <label for="selPosition">موضع الودجت على الشاشة</label>
+            <select class="form-control" id="selPosition">
+              <option value="bottom-right" selected>أسفل اليمين (افتراضي)</option>
+              <option value="bottom-left">أسفل اليسار</option>
+              <option value="top-right">أعلى اليمين</option>
+              <option value="top-left">أعلى اليسار</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="selTheme">المظهر (Theme)</label>
+            <select class="form-control" id="selTheme">
+              <option value="dark" selected>داكن (Dark Glass)</option>
+              <option value="light">فاتح (Light Clean)</option>
+            </select>
+          </div>
+
+          <label class="form-check">
+            <input type="checkbox" id="chkAutoStart" checked>
+            <span>بدء تشغيل البرنامج تلقائياً مع إقلاع الجهاز (Autostart)</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Word Explorer / Dictionary -->
+    <div class="tab-content" id="tab-dictionary">
+      <div class="dict-controls">
+        <input type="text" class="form-control search-input" id="searchWords" placeholder="🔍 ابحث عن كلمة إنجليزية أو معنى بالعربية...">
+        <select class="form-control" id="filterLevel" style="width: 170px;">
+          <option value="All">جميع المستويات</option>
+          <option value="A1">A1</option>
+          <option value="A2">A2</option>
+          <option value="B1">B1</option>
+          <option value="B2">B2</option>
+          <option value="C1">C1</option>
+          <option value="C2">C2</option>
+        </select>
+      </div>
+
+      <div class="word-cards-list" id="wordListContainer">
+        <!-- Dynamically injected word rows -->
+      </div>
+    </div>
+
+    <!-- Tab 3: Statistics -->
+    <div class="tab-content" id="tab-stats">
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-val" id="statTotalWords">0</div>
+          <div class="stat-lbl">إجمالي الكلمات في المعجم</div>
+        </div>
+
+        <div class="stat-box">
+          <div class="stat-val" style="color: #10b981;" id="statMemorizedWords">0</div>
+          <div class="stat-lbl">كلمات حُفظت وأُتقنت ✅</div>
+        </div>
+
+        <div class="stat-box">
+          <div class="stat-val" style="color: #f59e0b;" id="statReviewWords">0</div>
+          <div class="stat-lbl">كلمات قيد المراجعة 🔄</div>
+        </div>
+
+        <div class="stat-box">
+          <div class="stat-val" style="color: #818cf8;" id="statStreakDays">1</div>
+          <div class="stat-lbl">أيام الالتزام المستمر 🔥</div>
+        </div>
+      </div>
+
+      <div class="card" style="max-width: 480px; margin-top: 10px;">
+        <div class="card-title" style="color: #ef4444;">⚠️ إدارة البيانات والتقدم</div>
+        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+          يمكنك إعادة تصفير قوائم الحفظ والمراجعة للبدء من جديد إذا رغبت في ذلك.
+        </p>
+        <button class="btn-danger" id="btnResetProgress">إعادة تصفير سجل التعلم 🔄</button>
+      </div>
+    </div>
+  </main>
+
+  <script src="tauri-shim.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>
