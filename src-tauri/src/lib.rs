@@ -166,6 +166,8 @@ pub fn run() {
             ipc::s_show_specific_word,
             ipc::s_reset_progress,
             ipc::s_open_settings,
+            ipc::get_offline_audio,
+            ipc::get_audio_status,
         ])
         .run(tauri::generate_context!())
         .expect("error while running Zad English application");

@@ -33,6 +33,12 @@
     statReviewWords: document.getElementById('statReviewWords'),
     statStreakDays: document.getElementById('statStreakDays'),
     btnResetProgress: document.getElementById('btnResetProgress'),
+
+    // Offline Audio
+    badgeAudioUs: document.getElementById('badgeAudioUs'),
+    countAudioUs: document.getElementById('countAudioUs'),
+    badgeAudioUk: document.getElementById('badgeAudioUk'),
+    countAudioUk: document.getElementById('countAudioUk'),
   };
 
   // Tab switching
@@ -77,8 +83,41 @@
       el.chkAutoStart.checked = !!config.autoStart;
 
       document.body.className = config.theme === 'light' ? 'light' : '';
+      await checkAudioPacks();
     } catch (e) {
       console.error('Failed to load config:', e);
+    }
+  }
+
+  // Offline audio pack status
+  async function checkAudioPacks() {
+    try {
+      const status = await Zad.invoke('get_audio_status');
+      if (!status) return;
+      if (el.countAudioUs && el.badgeAudioUs) {
+        if (status.usCount > 0) {
+          el.badgeAudioUs.textContent = 'محملة ✅';
+          el.badgeAudioUs.style.background = '#059669';
+          el.countAudioUs.textContent = `${status.usCount.toLocaleString('ar-EG')} ملف صوتي مثبت محلياً (${status.usCount} files)`;
+        } else {
+          el.badgeAudioUs.textContent = 'غير متوفرة ❌';
+          el.badgeAudioUs.style.background = '#dc2626';
+          el.countAudioUs.textContent = 'يمكن تشغيل سكريبت scripts/download_audio.py للتحميل';
+        }
+      }
+      if (el.countAudioUk && el.badgeAudioUk) {
+        if (status.ukCount > 0) {
+          el.badgeAudioUk.textContent = 'محملة ✅';
+          el.badgeAudioUk.style.background = '#059669';
+          el.countAudioUk.textContent = `${status.ukCount.toLocaleString('ar-EG')} ملف صوتي مثبت محلياً (${status.ukCount} files)`;
+        } else {
+          el.badgeAudioUk.textContent = 'غير متوفرة ❌';
+          el.badgeAudioUk.style.background = '#dc2626';
+          el.countAudioUk.textContent = 'يمكن تشغيل سكريبت scripts/download_audio.py للتحميل';
+        }
+      }
+    } catch (e) {
+      console.error('Failed to check audio status:', e);
     }
   }
 

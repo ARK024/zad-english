@@ -272,3 +272,97 @@ pub fn s_reset_progress(store: State<'_, ConfigStore>) -> AppConfig {
 pub fn s_open_settings(app: AppHandle) {
     windows::show_settings_window(&app);
 }
+
+#[tauri::command]
+pub fn get_offline_audio(
+    app: AppHandle,
+    word: String,
+    dialect: Option<String>,
+) -> Option<String> {
+    use base64::Engine;
+    let d = dialect.unwrap_or_else(|| "us".to_string()).to_lowercase();
+    let d_suffix = if d.contains("uk") || d.contains("gb") { "uk" } else { "us" };
+
+    // Clean word: take first word if comma separated, trim, remove slashes
+    let clean = word
+        .split(',')
+        .next()
+        .unwrap_or(&word)
+        .trim()
+        .replace('/', "")
+        .replace('\\', "");
+
+    let candidates = [
+        format!("{}_{}.mp3", clean, d_suffix),
+        format!("{}_{}.mp3", clean.to_lowercase(), d_suffix),
+        format!("{}_{}.mp3", clean.to_uppercase(), d_suffix),
+    ];
+
+    let mut search_dirs = Vec::new();
+    search_dirs.push(std::path::PathBuf::from("/teamspace/studios/this_studio/zad-english/audio"));
+    search_dirs.push(std::path::PathBuf::from("audio"));
+
+    if let Ok(res) = app.path().resource_dir() {
+        search_dirs.push(res.join("audio"));
+    }
+    if let Ok(app_dir) = app.path().app_data_dir() {
+        search_dirs.push(app_dir.join("audio"));
+    }
+
+    for dir in &search_dirs {
+        for filename in &candidates {
+            let p = dir.join(filename);
+            if p.exists() {
+                if let Ok(bytes) = std::fs::read(&p) {
+                    let encoded = base64::engine::general_purpose::STANDARD.encode(bytes);
+                    return Some(encoded);
+                }
+            }
+        }
+    }
+
+    None
+}
+
+#[tauri::command]
+pub fn get_audio_status(app: AppHandle) -> serde_json::Value {
+    let mut count_us = 0;
+    let mut count_uk = 0;
+    let mut search_dirs = Vec::new();
+    search_dirs.push(std::path::PathBuf::from("/teamspace/studios/this_studio/zad-english/audio"));
+    search_dirs.push(std::path::PathBuf::from("audio"));
+
+    if let Ok(res) = app.path().resource_dir() {
+        search_dirs.push(res.join("audio"));
+    }
+    if let Ok(app_dir) = app.path().app_data_dir() {
+        search_dirs.push(app_dir.join("audio"));
+    }
+
+    for dir in &search_dirs {
+        if let Ok(entries) = std::fs::read_dir(dir) {
+            let mut found_any = false;
+            for entry in entries.flatten() {
+                let name = entry.file_name().to_string_lossy().to_string();
+                if name.ends_with("_us.mp3") {
+                    count_us += 1;
+                    found_any = true;
+                } else if name.ends_with("_uk.mp3") {
+                    count_uk += 1;
+                    found_any = true;
+                }
+            }
+            if found_any {
+                break;
+            }
+        }
+    }
+
+    serde_json::json!({
+        "usCount": count_us,
+        "ukCount": count_uk,
+        "total": count_us + count_uk,
+        "isOfflineReady": count_us > 0 || count_uk > 0
+    })
+}
+

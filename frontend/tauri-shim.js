@@ -21,13 +21,40 @@
       console.warn('[Zad] Listen called without Tauri runtime:', event);
       return Promise.resolve(() => {});
     },
-    speak: function (text, lang = 'en-US', rate = 1.0) {
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = lang;
-      u.rate = rate || 1.0;
-      window.speechSynthesis.speak(u);
+    currentAudio: null,
+    speak: async function (text, lang = 'en-US', rate = 1.0) {
+      const dialect = (lang && (lang.includes('uk') || lang.includes('gb') || lang.includes('GB'))) ? 'uk' : 'us';
+      
+      // Try offline native MP3 audio first
+      if (invoke) {
+        try {
+          const b64 = await invoke('get_offline_audio', { word: text, dialect: dialect });
+          if (b64) {
+            if (this.currentAudio) {
+              this.currentAudio.pause();
+              this.currentAudio = null;
+            }
+            const snd = new Audio('data:audio/mp3;base64,' + b64);
+            if (rate && rate !== 1.0) {
+              snd.playbackRate = rate;
+            }
+            this.currentAudio = snd;
+            await snd.play();
+            return;
+          }
+        } catch (e) {
+          console.debug('[Zad.speak] Offline audio failed or not found, falling back to TTS:', e);
+        }
+      }
+
+      // Offline TTS fallback via Web Speech API
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = lang || 'en-US';
+        u.rate = rate || 1.0;
+        window.speechSynthesis.speak(u);
+      }
     }
   };
 })();
