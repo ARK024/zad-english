@@ -10,7 +10,10 @@
     levelBadge: document.getElementById('levelBadge'),
     wordTitle: document.getElementById('wordTitle'),
     wordPos: document.getElementById('wordPos'),
-    wordPhonetic: document.getElementById('wordPhonetic'),
+    wordPhoneticUs: document.getElementById('wordPhoneticUs'),
+    wordPhoneticUk: document.getElementById('wordPhoneticUk'),
+    tagUs: document.getElementById('tagUs'),
+    tagUk: document.getElementById('tagUk'),
     arabicMeaning: document.getElementById('arabicMeaning'),
     englishDef: document.getElementById('englishDef'),
     exampleEn: document.getElementById('exampleEn'),
@@ -58,7 +61,8 @@
     // Word & phonetics
     el.wordTitle.textContent = w.word;
     el.wordPos.textContent = w.partOfSpeech || '';
-    el.wordPhonetic.textContent = w.phonetic || '';
+    el.wordPhoneticUs.textContent = w.phoneticUs || w.phonetic || '';
+    el.wordPhoneticUk.textContent = w.phoneticUk || w.phonetic || '';
 
     // Meanings
     el.arabicMeaning.textContent = w.meaningAr;
@@ -132,6 +136,8 @@
   // Event Listeners
   el.btnSoundUs.addEventListener('click', () => pronounce('en-US'));
   el.btnSoundUk.addEventListener('click', () => pronounce('en-GB'));
+  if (el.tagUs) el.tagUs.addEventListener('click', () => pronounce('en-US'));
+  if (el.tagUk) el.tagUk.addEventListener('click', () => pronounce('en-GB'));
   el.btnPlayAudio.addEventListener('click', () => pronounce(currentConfig.soundVoice || 'en-US'));
 
   el.btnNext.addEventListener('click', () => {

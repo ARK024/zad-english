@@ -11,6 +11,10 @@ pub struct WordItem {
     pub id: u64,
     pub word: String,
     pub phonetic: String,
+    #[serde(default)]
+    pub phonetic_us: String,
+    #[serde(default)]
+    pub phonetic_uk: String,
     pub part_of_speech: String,
     pub level: String,
     pub meaning_ar: String,
