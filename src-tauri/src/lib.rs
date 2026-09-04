@@ -68,6 +68,13 @@ pub fn run() {
     env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
     log::info!("Starting Zad English application...");
 
+    std::panic::set_hook(Box::new(|info| {
+        log::error!("CRITICAL PANIC: {}", info);
+        eprintln!("CRITICAL PANIC: {}", info);
+        let temp_log = std::env::temp_dir().join("zad-english-crash.log");
+        let _ = std::fs::write(&temp_log, format!("PANIC: {}\n", info));
+    }));
+
     let app_context = AppContext::new();
     let tray_state = TrayState::new();
 
@@ -99,32 +106,8 @@ pub fn run() {
                 .unwrap_or_else(|_| PathBuf::from("."));
             let store = ConfigStore::load_or_default(config_dir);
 
-            // Locate oxford_words.json
-            let mut data_path = PathBuf::from("data/oxford_words.json");
-            if !data_path.exists() {
-                if let Ok(res_path) = app.path().resource_dir() {
-                    let p = res_path.join("data/oxford_words.json");
-                    if p.exists() {
-                        data_path = p;
-                    }
-                }
-            }
-            if !data_path.exists() {
-                // Check relative to current studio workspace
-                let fallback = PathBuf::from("/teamspace/studios/this_studio/zad-english/data/oxford_words.json");
-                if fallback.exists() {
-                    data_path = fallback;
-                }
-            }
-
-            let data_loader = match DataLoader::load_from_path(data_path.clone()) {
-                Ok(dl) => dl,
-                Err(e) => {
-                    log::error!("Failed to load oxford_words.json from {:?}: {}", data_path, e);
-                    DataLoader::load_from_path(PathBuf::from("/teamspace/studios/this_studio/zad-english/data/oxford_words.json"))
-                        .unwrap_or_else(|_| panic!("oxford_words.json could not be loaded"))
-                }
-            };
+            // Load Oxford words (tries local files, resources, app data, then embedded fallback)
+            let data_loader = DataLoader::load_or_default(app_handle);
 
             app.manage(store);
             app.manage(data_loader);

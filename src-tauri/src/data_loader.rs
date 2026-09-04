@@ -63,6 +63,53 @@ impl DataLoader {
         Ok(Self { words })
     }
 
+    pub fn load_or_default(app: &tauri::AppHandle) -> Self {
+        use tauri::Manager;
+        let mut candidates: Vec<PathBuf> = Vec::new();
+
+        if let Ok(exe) = std::env::current_exe() {
+            if let Some(parent) = exe.parent() {
+                candidates.push(parent.join("data").join("oxford_words.json"));
+                candidates.push(parent.join("oxford_words.json"));
+                if let Some(grand) = parent.parent() {
+                    candidates.push(grand.join("data").join("oxford_words.json"));
+                    candidates.push(grand.join("oxford_words.json"));
+                }
+            }
+        }
+        if let Ok(res_dir) = app.path().resource_dir() {
+            candidates.push(res_dir.join("data").join("oxford_words.json"));
+            candidates.push(res_dir.join("oxford_words.json"));
+        }
+        if let Ok(app_dir) = app.path().app_data_dir() {
+            candidates.push(app_dir.join("data").join("oxford_words.json"));
+            candidates.push(app_dir.join("oxford_words.json"));
+        }
+        if let Ok(cwd) = std::env::current_dir() {
+            candidates.push(cwd.join("data").join("oxford_words.json"));
+            candidates.push(cwd.join("oxford_words.json"));
+        }
+        candidates.push(PathBuf::from("/teamspace/studios/this_studio/zad-english/data/oxford_words.json"));
+
+        for p in &candidates {
+            if p.exists() {
+                if let Ok(content) = fs::read_to_string(p) {
+                    if let Ok(words) = serde_json::from_str::<Vec<WordItem>>(&content) {
+                        log::info!("Successfully loaded {} words from file: {:?}", words.len(), p);
+                        return Self { words };
+                    }
+                }
+            }
+        }
+
+        log::warn!("No external oxford_words.json found; falling back to embedded dataset");
+        const EMBEDDED_WORDS: &str = include_str!("../../data/oxford_words.json");
+        let words: Vec<WordItem> = serde_json::from_str(EMBEDDED_WORDS)
+            .expect("Embedded oxford_words.json must be valid JSON");
+        log::info!("Successfully loaded {} embedded words into memory!", words.len());
+        Self { words }
+    }
+
     pub fn total_count(&self) -> usize {
         self.words.len()
     }

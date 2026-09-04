@@ -173,6 +173,12 @@ pub fn show_widget(
         }
     };
 
+    let w_clone = window.clone();
+    tauri::async_runtime::spawn(async move {
+        tokio::time::sleep(std::time::Duration::from_millis(600)).await;
+        let _ = w_clone.show();
+    });
+
     let store_c = store.clone();
     let win_c = window.clone();
     window.on_window_event(move |event| match event {
@@ -253,7 +259,13 @@ pub fn show_quiz_window(
         .skip_taskbar(true)
         .visible(false);
 
-    let _ = builder.build();
+    if let Ok(w) = builder.build() {
+        let w_clone = w.clone();
+        tauri::async_runtime::spawn(async move {
+            tokio::time::sleep(std::time::Duration::from_millis(600)).await;
+            let _ = w_clone.show();
+        });
+    }
     guard.release();
 }
 

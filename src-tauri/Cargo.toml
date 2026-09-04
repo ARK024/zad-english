@@ -1,6 +1,6 @@
 [package]
 name = "zad-english"
-version = "1.0.0"
+version = "1.0.1"
 description = "زاد الإنجليزية - رفيقك اليومي لتعلم وممارسة مفردات أكسفورد"
 authors = ["Zad English Team"]
 edition = "2021"
