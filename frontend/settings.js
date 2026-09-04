@@ -135,44 +135,71 @@
     const memSet = new Set(config.memorizedIds || []);
     const revSet = new Set(config.reviewIds || []);
 
-    words.forEach(w => {
-      const row = document.createElement('div');
-      row.className = 'word-row';
+    const limit = 60;
+    const slice = words.slice(0, limit);
 
-      let statusBadge = '';
-      if (memSet.has(w.id)) {
-        statusBadge = '<span style="color:#10b981; font-weight:700; font-size:12px;">✅ محفوظ</span>';
-      } else if (revSet.has(w.id)) {
-        statusBadge = '<span style="color:#f59e0b; font-weight:700; font-size:12px;">🔄 مراجعة</span>';
-      }
-
-      row.innerHTML = `
-        <div class="word-info">
-          <div class="word-head">
-            <span class="w-text">${w.word}</span>
-            <span class="w-ipa">${w.phonetic || ''}</span>
-            <span class="w-badge" style="background: rgba(56, 189, 248, 0.2); color:#38bdf8;">${w.level}</span>
-            ${statusBadge}
-          </div>
-          <div class="w-ar">${w.meaningAr}</div>
-          <div class="w-ex">“${w.example}”</div>
-        </div>
-        <div class="word-actions">
-          <button class="btn-sm btn-speak" title="استمع للنطق">🔊 استماع</button>
-          <button class="btn-sm btn-show" title="عرض في الودجت الآن">👁️ عرض</button>
-        </div>
-      `;
-
-      row.querySelector('.btn-speak').addEventListener('click', () => {
-        Zad.speak(w.word, config.soundVoice || 'en-US', config.soundRate || 1.0);
-      });
-
-      row.querySelector('.btn-show').addEventListener('click', () => {
-        Zad.invoke('s_show_specific_word', { id: w.id });
-      });
-
-      el.wordListContainer.appendChild(row);
+    slice.forEach(w => {
+      appendWordRow(w, memSet, revSet);
     });
+
+    if (words.length > limit) {
+      const moreBtn = document.createElement('button');
+      moreBtn.className = 'btn-sm';
+      moreBtn.style.cssText = 'align-self: center; margin: 15px auto; padding: 10px 24px; font-size: 13.5px; background: rgba(56, 189, 248, 0.15); color: var(--accent); border-color: var(--accent);';
+      moreBtn.textContent = `عرض المزيد (يوجد ${words.length - limit} كلمة إضافية)`;
+      
+      let currentOffset = limit;
+      moreBtn.addEventListener('click', () => {
+        const nextBatch = words.slice(currentOffset, currentOffset + limit);
+        nextBatch.forEach(w => appendWordRow(w, memSet, revSet));
+        currentOffset += limit;
+        if (currentOffset >= words.length) {
+          moreBtn.remove();
+        } else {
+          moreBtn.textContent = `عرض المزيد (يوجد ${words.length - currentOffset} كلمة إضافية)`;
+        }
+      });
+      el.wordListContainer.appendChild(moreBtn);
+    }
+  }
+
+  function appendWordRow(w, memSet, revSet) {
+    const row = document.createElement('div');
+    row.className = 'word-row';
+
+    let statusBadge = '';
+    if (memSet.has(w.id)) {
+      statusBadge = '<span style="color:#10b981; font-weight:700; font-size:12px;">✅ محفوظ</span>';
+    } else if (revSet.has(w.id)) {
+      statusBadge = '<span style="color:#f59e0b; font-weight:700; font-size:12px;">🔄 مراجعة</span>';
+    }
+
+    row.innerHTML = `
+      <div class="word-info">
+        <div class="word-head">
+          <span class="w-text">${w.word}</span>
+          <span class="w-ipa">${w.phonetic || ''}</span>
+          <span class="w-badge" style="background: rgba(56, 189, 248, 0.2); color:#38bdf8;">${w.level}</span>
+          ${statusBadge}
+        </div>
+        <div class="w-ar">${w.meaningAr}</div>
+        <div class="w-ex">“${w.example}”</div>
+      </div>
+      <div class="word-actions">
+        <button class="btn-sm btn-speak" title="استمع للنطق">🔊 استماع</button>
+        <button class="btn-sm btn-show" title="عرض في الودجت الآن">👁️ عرض</button>
+      </div>
+    `;
+
+    row.querySelector('.btn-speak').addEventListener('click', () => {
+      Zad.speak(w.word, config.soundVoice || 'en-US', config.soundRate || 1.0);
+    });
+
+    row.querySelector('.btn-show').addEventListener('click', () => {
+      Zad.invoke('s_show_specific_word', { id: w.id });
+    });
+
+    el.wordListContainer.appendChild(row);
   }
 
   let searchTimeout = null;
