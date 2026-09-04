@@ -208,6 +208,8 @@
     renderWord(payload);
   });
 
-  // Inform backend that the widget webview is ready
-  Zad.invoke('widget_ready');
+  // Inform backend that the widget webview is ready and render initial data
+  Zad.invoke('widget_ready').then(payload => {
+    if (payload) renderWord(payload);
+  });
 })();

@@ -80,15 +80,11 @@ pub fn run() {
 
     tauri::Builder::default()
         .plugin(tauri_plugin_single_instance::init(|app, _argv, _cwd| {
-            log::info!("Another instance launched; focusing existing widget");
+            log::info!("Another instance launched; focusing existing window");
+            windows::show_settings_window(app);
             if let Some(w) = app.get_webview_window(windows::WIDGET_LABEL) {
                 let _ = w.show();
                 let _ = w.set_focus();
-            } else {
-                let store: tauri::State<ConfigStore> = app.state();
-                let data: tauri::State<DataLoader> = app.state();
-                let ctx: tauri::State<AppContext> = app.state();
-                windows::show_widget(app, &store, &data, &ctx.window_guard, None);
             }
         }))
         .plugin(tauri_plugin_dialog::init())
@@ -121,6 +117,9 @@ pub fn run() {
 
             // Start orchestrator background loop
             app_context.restart_orchestrator(app_handle);
+
+            // Show main window on launch
+            windows::show_settings_window(app_handle);
 
             // Show initial word widget on launch
             let store_state: tauri::State<ConfigStore> = app.state();

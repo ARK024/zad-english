@@ -2,26 +2,28 @@ use crate::config::{AppConfig, ConfigStore};
 use crate::data_loader::{DataLoader, QuizQuestion, WordItem};
 use crate::windows;
 use crate::AppContext;
+use serde_json::Value;
 use tauri::{AppHandle, Emitter, Manager, State};
 use tauri_plugin_autostart::ManagerExt;
 
 // ── Widget Commands ──────────────────────────────────────────────────────────
 
 #[tauri::command]
-pub fn widget_ready(app: AppHandle, ctx: State<'_, AppContext>, store: State<'_, ConfigStore>, data: State<'_, DataLoader>) {
-    if let Some(w) = app.get_webview_window(windows::WIDGET_LABEL) {
-        let payload = ctx
-            .pending_widget_payload
-            .lock()
-            .take()
-            .or_else(|| windows::build_word_payload(&store, &data, None));
+pub fn widget_ready(app: AppHandle, ctx: State<'_, AppContext>, store: State<'_, ConfigStore>, data: State<'_, DataLoader>) -> Option<Value> {
+    let payload = ctx
+        .pending_widget_payload
+        .lock()
+        .take()
+        .or_else(|| windows::build_word_payload(&store, &data, None));
 
-        if let Some(p) = payload {
-            let _ = w.emit("word_data", p);
+    if let Some(ref p) = payload {
+        if let Some(w) = app.get_webview_window(windows::WIDGET_LABEL) {
+            let _ = w.emit("word_data", p.clone());
+            let _ = w.show();
+            let _ = w.set_focus();
         }
-        let _ = w.show();
-        let _ = w.set_focus();
     }
+    payload
 }
 
 #[tauri::command]

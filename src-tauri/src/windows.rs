@@ -158,11 +158,11 @@ pub fn show_widget(
             .min_inner_size(360.0, 380.0)
             .max_inner_size(700.0, 750.0)
             .decorations(false)
-            .transparent(true)
+            .transparent(false)
             .always_on_top(true)
             .resizable(true)
             .skip_taskbar(true)
-            .visible(false);
+            .visible(true);
 
     let window = match builder.build() {
         Ok(w) => w,
@@ -253,18 +253,15 @@ pub fn show_quiz_window(
         .min_inner_size(360.0, 360.0)
         .max_inner_size(600.0, 600.0)
         .decorations(false)
-        .transparent(true)
+        .transparent(false)
         .always_on_top(true)
         .resizable(true)
         .skip_taskbar(true)
-        .visible(false);
+        .visible(true);
 
     if let Ok(w) = builder.build() {
-        let w_clone = w.clone();
-        tauri::async_runtime::spawn(async move {
-            tokio::time::sleep(std::time::Duration::from_millis(600)).await;
-            let _ = w_clone.show();
-        });
+        let _ = w.show();
+        let _ = w.set_focus();
     }
     guard.release();
 }
@@ -277,6 +274,7 @@ pub fn destroy_quiz(app: &AppHandle) {
 
 pub fn show_settings_window(app: &AppHandle) {
     if let Some(w) = app.get_webview_window(SETTINGS_LABEL) {
+        let _ = w.unminimize();
         let _ = w.show();
         let _ = w.set_focus();
         return;
@@ -288,12 +286,15 @@ pub fn show_settings_window(app: &AppHandle) {
         WebviewUrl::App("settings.html".into()),
     )
     .title("زاد الإنجليزية — الإعدادات والمعجم الشامل")
-    .inner_size(860.0, 640.0)
+    .inner_size(900.0, 680.0)
     .min_inner_size(650.0, 500.0)
     .center()
     .decorations(true)
     .resizable(true)
     .visible(true);
 
-    let _ = builder.build();
+    if let Ok(w) = builder.build() {
+        let _ = w.show();
+        let _ = w.set_focus();
+    }
 }
