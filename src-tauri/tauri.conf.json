@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "زاد الإنجليزية",
+  "productName": "Zad English",
   "version": "1.0.0",
   "identifier": "com.zad.english",
   "build": {
