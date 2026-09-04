@@ -3,7 +3,7 @@ use parking_lot::Mutex;
 use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 use std::sync::Arc;
 use std::time::Duration;
-use tokio::task::JoinHandle;
+use tauri::async_runtime::JoinHandle;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum TickAction {
@@ -38,7 +38,7 @@ impl Orchestrator {
         let counter = self.counter.clone();
         let cb = Arc::new(callback);
 
-        let handle = tokio::spawn(async move {
+        let handle = tauri::async_runtime::spawn(async move {
             log::info!("Orchestrator background loop started");
             loop {
                 if !running.load(Ordering::SeqCst) {

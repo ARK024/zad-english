@@ -293,8 +293,15 @@ pub fn show_settings_window(app: &AppHandle) {
     .resizable(true)
     .visible(true);
 
-    if let Ok(w) = builder.build() {
-        let _ = w.show();
-        let _ = w.set_focus();
+    match builder.build() {
+        Ok(w) => {
+            log::info!("Settings window created successfully");
+            let _ = w.show();
+            let _ = w.set_focus();
+        }
+        Err(e) => {
+            log::error!("Failed to create settings window: {}", e);
+        }
     }
 }
+
