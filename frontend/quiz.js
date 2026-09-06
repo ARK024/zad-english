@@ -10,7 +10,8 @@
     btnCloseQuiz: document.getElementById('btnCloseQuiz'),
     qPrompt: document.getElementById('qPrompt'),
     targetWordText: document.getElementById('targetWordText'),
-    btnAudioQuiz: document.getElementById('btnAudioQuiz'),
+    btnAudioQuizUs: document.getElementById('btnAudioQuizUs'),
+    btnAudioQuizUk: document.getElementById('btnAudioQuizUk'),
     optionsGrid: document.getElementById('optionsGrid'),
     feedbackMsg: document.getElementById('feedbackMsg'),
     btnNextQuiz: document.getElementById('btnNextQuiz'),
@@ -26,9 +27,9 @@
       document.body.className = payload.config.theme === 'light' ? 'light' : '';
     }
 
-    el.qPrompt.textContent = currentQuestion.prompt;
+    el.qPrompt.textContent = currentQuestion.prompt || 'ما هو المعنى الصحيح لهذه المفردة؟';
     el.targetWordText.textContent = currentQuestion.targetWord;
-    el.feedbackMsg.textContent = 'اختر الإجابة الصحيحة';
+    el.feedbackMsg.textContent = 'اختر الإجابة المناسبة';
     el.feedbackMsg.className = 'feedback-msg';
     el.btnNextQuiz.style.display = 'none';
 
@@ -40,6 +41,11 @@
       btn.addEventListener('click', () => handleAnswer(opt, btn));
       el.optionsGrid.appendChild(btn);
     });
+
+    // Auto-pronounce if desired
+    if (payload.config && payload.config.soundVoice) {
+      Zad.speak(currentQuestion.targetWord, payload.config.soundVoice, 1.0);
+    }
   }
 
   function handleAnswer(opt, clickedBtn) {
@@ -54,14 +60,14 @@
       clickedBtn.classList.add('correct');
       streak++;
       el.streakBadge.textContent = '🔥 ' + streak;
-      el.feedbackMsg.textContent = 'أحسنت! إجابة صحيحة ✅';
+      el.feedbackMsg.textContent = 'إجابة ممتازة وصحيحة! 🎉';
       el.feedbackMsg.className = 'feedback-msg correct';
       Zad.speak(currentQuestion.targetWord, 'en-US', 1.0);
     } else {
       clickedBtn.classList.add('wrong');
       streak = 0;
       el.streakBadge.textContent = '🔥 0';
-      el.feedbackMsg.textContent = 'إجابة خاطئة ❌';
+      el.feedbackMsg.textContent = 'إجابة غير صحيحة ❌';
       el.feedbackMsg.className = 'feedback-msg wrong';
 
       // Highlight the correct one
@@ -72,18 +78,45 @@
       });
     }
 
-    // Inform backend to update statistics / review queue
+    // Inform backend to update statistics
     Zad.invoke('q_answer', {
       isCorrect: isCorrect,
       wordId: currentQuestion.wordId
     });
 
-    el.btnNextQuiz.style.display = 'inline-block';
+    el.btnNextQuiz.style.display = 'inline-flex';
   }
 
-  el.btnAudioQuiz.addEventListener('click', () => {
-    if (currentQuestion && currentQuestion.targetWord) {
-      Zad.speak(currentQuestion.targetWord, 'en-US', 1.0);
+  if (el.btnAudioQuizUs) {
+    el.btnAudioQuizUs.addEventListener('click', () => {
+      if (currentQuestion && currentQuestion.targetWord) {
+        Zad.speak(currentQuestion.targetWord, 'en-US', 1.0);
+      }
+    });
+  }
+
+  if (el.btnAudioQuizUk) {
+    el.btnAudioQuizUk.addEventListener('click', () => {
+      if (currentQuestion && currentQuestion.targetWord) {
+        Zad.speak(currentQuestion.targetWord, 'en-GB', 1.0);
+      }
+    });
+  }
+
+  // Animate sound wave mini
+  window.addEventListener('zad:audio_state', (e) => {
+    const state = e.detail || {};
+    if (state.playing) {
+      if (state.dialect === 'uk') {
+        if (el.btnAudioQuizUk) el.btnAudioQuizUk.classList.add('playing');
+        if (el.btnAudioQuizUs) el.btnAudioQuizUs.classList.remove('playing');
+      } else {
+        if (el.btnAudioQuizUs) el.btnAudioQuizUs.classList.add('playing');
+        if (el.btnAudioQuizUk) el.btnAudioQuizUk.classList.remove('playing');
+      }
+    } else {
+      if (el.btnAudioQuizUs) el.btnAudioQuizUs.classList.remove('playing');
+      if (el.btnAudioQuizUk) el.btnAudioQuizUk.classList.remove('playing');
     }
   });
 

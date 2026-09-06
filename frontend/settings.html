@@ -3,242 +3,452 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https: data:;">
-  <title>زاد الإنجليزية — الإعدادات والمعجم الشامل</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https: data: blob:;">
+  <title>زاد الإنجليزية — لوحة التحكم والمعجم الشامل</title>
   <link rel="stylesheet" href="styles/settings.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- Sidebar Tabs -->
-  <aside class="sidebar">
-    <div class="brand">
-      <span class="brand-icon">⚡</span>
-      <span class="brand-name">زاد الإنجليزية</span>
-    </div>
+  <!-- App Shell -->
+  <div class="app-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-badge">⚡</div>
+        <div class="brand-text">
+          <span class="brand-name">زاد الإنجليزية</span>
+          <span class="brand-ver">v1.0.4 Studio</span>
+        </div>
+      </div>
 
-    <nav class="nav-tabs">
-      <button class="tab-btn active" data-tab="general">
-        <span>⚙️</span>
-        <span>الإعدادات والتوقيت</span>
-      </button>
-      <button class="tab-btn" data-tab="dictionary">
-        <span>📖</span>
-        <span>المعجم والكلمات</span>
-      </button>
-      <button class="tab-btn" data-tab="stats">
-        <span>📊</span>
-        <span>التقدم والإحصائيات</span>
-      </button>
-    </nav>
-  </aside>
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="general">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </span>
+          <span class="nav-label">الإعدادات والتوقيت</span>
+        </button>
 
-  <!-- Main View -->
-  <main class="main-view">
-    <div class="top-bar">
-      <h2 class="page-title" id="pageTitle">الإعدادات والتوقيت</h2>
-      <button class="btn-save" id="btnSaveConfig">حفظ التغييرات ✅</button>
-    </div>
+        <button class="nav-item" data-tab="audio">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+          </span>
+          <span class="nav-label">الصوت البشري (Studio)</span>
+          <span class="nav-badge-pill">جديد</span>
+        </button>
 
-    <!-- Tab 1: General Settings -->
-    <div class="tab-content active" id="tab-general">
-      <div class="settings-grid">
-        <!-- Card 1: Level & Display -->
-        <div class="card">
-          <div class="card-title">📚 المسار التعليمي والمستوى</div>
+        <button class="nav-item" data-tab="dictionary">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          </span>
+          <span class="nav-label">المعجم والكلمات</span>
+        </button>
+
+        <button class="nav-item" data-tab="stats">
+          <span class="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          </span>
+          <span class="nav-label">الإحصائيات والتقدم</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="stat-mini">
+          <span class="stat-mini-val" id="miniWordCount">6,207</span>
+          <span class="stat-mini-lbl">مفردة أكسفورد معتمدة</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1 class="topbar-title" id="pageTitle">الإعدادات والتوقيت</h1>
+          <p class="topbar-subtitle" id="pageSubtitle">تخصيص سلوك الويدجت العائم، تردد الظهور، والمسار التعليمي</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-secondary" id="btnPreviewWidget" title="إظهار الويدجت للتجربة">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            <span>معاينة الويدجت</span>
+          </button>
+          <button class="btn btn-primary" id="btnSaveConfig">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>حفظ التعديلات</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Views -->
+      <div class="content-scroll">
+
+        <!-- TAB 1: General Settings -->
+        <section class="tab-panel active" id="tab-general">
+          <div class="cards-grid">
+            
+            <!-- Learning Track -->
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-icon blue">📚</div>
+                <div>
+                  <h3 class="card-title">المسار التعليمي ومستوى المفردات</h3>
+                  <p class="card-desc">حدد مستوى صعوبة المفردات المعروضة في الويدجت</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="field-group">
+                  <label class="field-label" for="selLevel">مستوى المفردات المستهدف (CEFR)</label>
+                  <select class="custom-select" id="selLevel">
+                    <option value="All">جميع المستويات — الكل بالتتابع (All Levels)</option>
+                    <option value="A1">A1 — مبتدئ (Beginner)</option>
+                    <option value="A2">A2 — أساسي (Elementary)</option>
+                    <option value="B1">B1 — متوسط (Intermediate)</option>
+                    <option value="B2">B2 — فوق المتوسط (Upper-Intermediate)</option>
+                    <option value="C1">C1 — متقدم (Advanced)</option>
+                    <option value="C2">C2 — احتراف وإتقان (Mastery)</option>
+                  </select>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label" for="selQuizFreq">تردد الاختبارات السريعة (Quiz)</label>
+                  <select class="custom-select" id="selQuizFreq">
+                    <option value="0">معطل (إظهار بطاقات المفردات فقط)</option>
+                    <option value="3">كل 3 بطاقات يظهر اختبار سريع</option>
+                    <option value="5" selected>كل 5 بطاقات يظهر اختبار سريع (موصى به)</option>
+                    <option value="10">كل 10 بطاقات</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Timing & Intervals -->
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-icon amber">⏱️</div>
+                <div>
+                  <h3 class="card-title">فترات الظهور والتوقيت</h3>
+                  <p class="card-desc">تحكم بدقة في متى وكم يبقى الويدجت على شاشتك</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="field-group">
+                  <label class="field-label" for="selInterval">الفترة الدورية للظهور</label>
+                  <select class="custom-select" id="selInterval">
+                    <option value="5">كل 5 دقائق (تركيز مكثف)</option>
+                    <option value="10">كل 10 دقائق</option>
+                    <option value="15" selected>كل 15 دقيقة (المعدل المثالي)</option>
+                    <option value="30">كل 30 دقيقة</option>
+                    <option value="60">كل 60 دقيقة (ساعة واحدة)</option>
+                  </select>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label" for="selDuration">مدة بقاء الويدجت قبل الاختفاء التلقائي</label>
+                  <select class="custom-select" id="selDuration">
+                    <option value="15">15 ثانية (سريع)</option>
+                    <option value="30" selected>30 ثانية (الافتراضي)</option>
+                    <option value="60">دقيقة كاملة (60 ثانية)</option>
+                    <option value="0">دائم (لا يختفي إلا بالنقر على الإغلاق)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- UI & Appearance -->
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-icon emerald">🎨</div>
+                <div>
+                  <h3 class="card-title">المظهر وموقع الشاشة</h3>
+                  <p class="card-desc">تخصيص نمط العرض ومكان استقرار البطاقة</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="field-group">
+                  <label class="field-label" for="selPosition">موضع البطاقة على سطح المكتب</label>
+                  <select class="custom-select" id="selPosition">
+                    <option value="bottom-right" selected>أسفل اليمين (الأكثر ملاءمة)</option>
+                    <option value="bottom-left">أسفل اليسار</option>
+                    <option value="top-right">أعلى اليمين</option>
+                    <option value="top-left">أعلى اليسار</option>
+                  </select>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label" for="selTheme">نمط الألوان (Theme)</label>
+                  <select class="custom-select" id="selTheme">
+                    <option value="dark" selected>الوضع الداكن الفاخر (Dark Obsidian)</option>
+                    <option value="light">الوضع الفاتح الأنيق (Crisp Pearl)</option>
+                  </select>
+                </div>
+
+                <div class="switch-row">
+                  <div class="switch-info">
+                    <span class="switch-title">بدء التشغيل التلقائي</span>
+                    <span class="switch-desc">تشغيل زاد الإنجليزية فور إقلاع النظام</span>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="chkAutoStart" checked>
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Behavior -->
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-icon purple">⚡</div>
+                <div>
+                  <h3 class="card-title">خيارات الاستخدام الذكية</h3>
+                  <p class="card-desc">تحسين تفاعلك اليومي مع التطبيق</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="switch-row">
+                  <div class="switch-info">
+                    <span class="switch-title">النطق الصوتي التلقائي</span>
+                    <span class="switch-desc">نطق الكلمة بصوت بشري فور ظهور البطاقة</span>
+                  </div>
+                  <label class="switch">
+                    <input type="checkbox" id="chkAutoPronounce" checked>
+                    <span class="slider"></span>
+                  </label>
+                </div>
+
+                <div class="field-group" style="margin-top: 14px;">
+                  <label class="field-label" for="selVoice">اللهجة الصوتية الافتراضية</label>
+                  <select class="custom-select" id="selVoice">
+                    <option value="en-US" selected>🇺🇸 أمريكية (US English — Studio Native)</option>
+                    <option value="en-GB">🇬🇧 بريطانية (UK English — Studio Native)</option>
+                  </select>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label" for="selSpeed">سرعة النطق الصوتي</label>
+                  <select class="custom-select" id="selSpeed">
+                    <option value="0.85">هادئة (0.85x) — ممتازة للتدقيق والاستماع</option>
+                    <option value="1.0" selected>طبيعية (1.0x) — النطق البشري الأصلي</option>
+                    <option value="1.15">سريعة (1.15x)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- TAB 2: Studio Human Audio Laboratory -->
+        <section class="tab-panel" id="tab-audio">
           
-          <div class="form-group">
-            <label for="selLevel">مستوى المفردات المستهدف (CEFR)</label>
-            <select class="form-control" id="selLevel">
-              <option value="All">جميع المستويات (All Levels)</option>
-              <option value="A1">A1 — مبتدئ (Beginner)</option>
-              <option value="A2">A2 — أساسي (Elementary)</option>
-              <option value="B1">B1 — متوسط (Intermediate)</option>
-              <option value="B2">B2 — فوق المتوسط (Upper-Intermediate)</option>
-              <option value="C1">C1 — متقدم (Advanced)</option>
-              <option value="C2">C2 — إتقان واحتراف (Mastery)</option>
-            </select>
+          <!-- Audio Hero Card -->
+          <div class="glass-card audio-hero">
+            <div class="audio-hero-content">
+              <div class="audio-badge">✨ استوديو أصلي 100%</div>
+              <h2 class="audio-hero-title">نظام النطق البشري فائق النقاء</h2>
+              <p class="audio-hero-desc">
+                تم التخلي بالكامل عن الأصوات الآلية الروبوتية (TTS Utterance). تم تزويد زاد الإنجليزية بمحرك نطق بشري حي مُسجّل بواسطة متحدثين أصليين في الاستوديو لكل كلمة، مع دعم النطقين الأمريكي 🇺🇸 والبريطاني 🇬🇧 بدقة صوتية لا مثيل لها وتخزين محلي ذكي (Offline Caching).
+              </p>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="selQuizFreq">تكرار الاختبار السريع (Quiz)</label>
-            <select class="form-control" id="selQuizFreq">
-              <option value="0">معطل (إظهار بطاقات المفردات فقط)</option>
-              <option value="3">كل 3 كلمات يظهر اختبار</option>
-              <option value="5" selected>كل 5 كلمات يظهر اختبار (موصى به)</option>
-              <option value="10">كل 10 كلمات</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Card 2: Timing -->
-        <div class="card">
-          <div class="card-title">⏱️ توقيت الظهور التلقائي</div>
-
-          <div class="form-group">
-            <label for="selInterval">فترة الظهور الدورية</label>
-            <select class="form-control" id="selInterval">
-              <option value="5">كل 5 دقائق</option>
-              <option value="10">كل 10 دقائق</option>
-              <option value="15" selected>كل 15 دقيقة (افتراضي)</option>
-              <option value="30">كل 30 دقيقة</option>
-              <option value="60">كل ساعة</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="selDuration">مدة بقاء الودجت على الشاشة</label>
-            <select class="form-control" id="selDuration">
-              <option value="15">15 ثانية</option>
-              <option value="30" selected>30 ثانية</option>
-              <option value="60">دقيقة واحدة</option>
-              <option value="0">لا يختفي (إغلاق يدوي فقط)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Card 3: Audio & Pronunciation -->
-        <div class="card">
-          <div class="card-title">🔊 النطق الصوتي (Audio)</div>
-
-          <div class="form-group">
-            <label for="selVoice">اللهجة الصوتية الافتراضية</label>
-            <select class="form-control" id="selVoice">
-              <option value="en-US" selected>🇺🇸 أمريكية (US English)</option>
-              <option value="en-GB">🇬🇧 بريطانية (UK English)</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="selSpeed">سرعة النطق</label>
-            <select class="form-control" id="selSpeed">
-              <option value="0.8">بطيئة (0.8x) — ممتازة للمبتدئين</option>
-              <option value="1.0" selected>طبيعية (1.0x)</option>
-              <option value="1.2">سريعة (1.2x)</option>
-            </select>
-          </div>
-
-          <label class="form-check">
-            <input type="checkbox" id="chkAutoPronounce" checked>
-            <span>نطق الكلمة صوتياً تلقائياً بمجرد ظهور النافذة</span>
-          </label>
-        </div>
-
-        <!-- Card 4: Appearance & Position -->
-        <div class="card">
-          <div class="card-title">🎨 المظهر وموضع الشاشة</div>
-
-          <div class="form-group">
-            <label for="selPosition">موضع الودجت على الشاشة</label>
-            <select class="form-control" id="selPosition">
-              <option value="bottom-right" selected>أسفل اليمين (افتراضي)</option>
-              <option value="bottom-left">أسفل اليسار</option>
-              <option value="top-right">أعلى اليمين</option>
-              <option value="top-left">أعلى اليسار</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="selTheme">المظهر (Theme)</label>
-            <select class="form-control" id="selTheme">
-              <option value="dark" selected>داكن (Dark Glass)</option>
-              <option value="light">فاتح (Light Clean)</option>
-            </select>
-          </div>
-
-          <label class="form-check">
-            <input type="checkbox" id="chkAutoStart" checked>
-            <span>بدء تشغيل البرنامج تلقائياً مع إقلاع الجهاز (Autostart)</span>
-          </label>
-        </div>
-
-        <!-- Card 5: Offline Audio Management -->
-        <div class="card" style="grid-column: 1 / -1;">
-          <div class="card-title">🎧 الملفات الصوتية بدون إنترنت (Offline Audio MP3s)</div>
-          <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
-            يدعم زاد الإنجليزية النطق البشري الطبيعي بالكامل بدون إنترنت عبر ملفات MP3 عالية النقاء المستخرجة من قواميس Oxford.
-          </p>
-
-          <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px;">
-            <div style="flex: 1; min-width: 250px; background: rgba(0,0,0,0.2); padding: 14px; border-radius: 10px; border: 1px solid var(--border);">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 700; font-size: 14px;">🇺🇸 الحزمة الأمريكية (US Pack)</span>
-                <span class="badge-level" id="badgeAudioUs" style="background:#059669; color:#fff;">محملة ✅</span>
-              </div>
-              <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;" id="countAudioUs">
-                4,956 ملف صوتي مثبت محلياً
+          <!-- Live Voice Audition & Testing Lab -->
+          <div class="glass-card" style="margin-top: 18px;">
+            <div class="card-header">
+              <div class="card-icon purple">🎧</div>
+              <div>
+                <h3 class="card-title">مختبر تجربة النطق الحي (Interactive Audio Lab)</h3>
+                <p class="card-desc">استمع الآن إلى جودة الصوت البشري باللكنتين بنقرة واحدة</p>
               </div>
             </div>
 
-            <div style="flex: 1; min-width: 250px; background: rgba(0,0,0,0.2); padding: 14px; border-radius: 10px; border: 1px solid var(--border);">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: 700; font-size: 14px;">🇬🇧 الحزمة البريطانية (UK Pack)</span>
-                <span class="badge-level" id="badgeAudioUk" style="background:#059669; color:#fff;">محملة ✅</span>
+            <div class="audio-tester-box">
+              <div class="audio-test-input-row">
+                <input type="text" class="custom-input" id="audioTestInput" value="extraordinary" placeholder="اكتب أي كلمة إنجليزية لتجربتها...">
+                <div class="audio-chips-container">
+                  <button class="audio-pill-btn" id="btnTestUs" data-dialect="us">
+                    <span class="pill-flag">🇺🇸</span>
+                    <span class="pill-name">لهجة أمريكية US</span>
+                    <span class="wave-anim">
+                      <i></i><i></i><i></i><i></i>
+                    </span>
+                  </button>
+                  <button class="audio-pill-btn" id="btnTestUk" data-dialect="uk">
+                    <span class="pill-flag">🇬🇧</span>
+                    <span class="pill-name">لهجة بريطانية UK</span>
+                    <span class="wave-anim">
+                      <i></i><i></i><i></i><i></i>
+                    </span>
+                  </button>
+                </div>
               </div>
-              <div style="font-size: 12px; color: var(--text-muted); margin-top: 6px;" id="countAudioUk">
-                4,956 ملف صوتي مثبت محلياً
+
+              <!-- Quick Presets -->
+              <div class="audio-presets-row">
+                <span class="presets-lbl">كلمات نموذجية للاستماع:</span>
+                <button class="preset-tag" data-word="extraordinary">extraordinary</button>
+                <button class="preset-tag" data-word="phenomenon">phenomenon</button>
+                <button class="preset-tag" data-word="enthusiasm">enthusiasm</button>
+                <button class="preset-tag" data-word="eloquent">eloquent</button>
+                <button class="preset-tag" data-word="serendipity">serendipity</button>
               </div>
             </div>
           </div>
-        </div>
+
+          <!-- Offline Storage & Status -->
+          <div class="cards-grid" style="margin-top: 18px;">
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-icon emerald">💾</div>
+                <div>
+                  <h3 class="card-title">الذاكرة السريعة للتخزين دون اتصال (IndexedDB Cache)</h3>
+                  <p class="card-desc">يتم حفظ كل صوت يُشغل محلياً ليعمل بدون إنترنت للأبد</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="cache-status-box">
+                  <div class="cache-metric">
+                    <span class="cache-val" id="cachedAudioCount">0</span>
+                    <span class="cache-lbl">تسجيل صوتي بشري مخزن محلياً على جهازك</span>
+                  </div>
+                  <div class="cache-status-pill ready">
+                    <span>جاهز للعمل دون اتصال</span>
+                    <span>✅</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="glass-card">
+              <div class="card-header">
+                <div class="card-icon blue">📦</div>
+                <div>
+                  <h3 class="card-title">حزم الملفات الصوتية المحلية</h3>
+                  <p class="card-desc">حالة مجلد الصوتيات المدمج مع ملف التثبيت</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="pack-status-row">
+                  <div class="pack-icon">🇺🇸</div>
+                  <div class="pack-details">
+                    <span class="pack-title">الحزمة الأمريكية (US Studio Pack)</span>
+                    <span class="pack-sub" id="statusAudioUsText">محملة وجاهزة</span>
+                  </div>
+                  <span class="badge-status-dot ready" id="statusAudioUsDot"></span>
+                </div>
+                <div class="pack-status-row" style="margin-top: 10px;">
+                  <div class="pack-icon">🇬🇧</div>
+                  <div class="pack-details">
+                    <span class="pack-title">الحزمة البريطانية (UK Studio Pack)</span>
+                    <span class="pack-sub" id="statusAudioUkText">محملة وجاهزة</span>
+                  </div>
+                  <span class="badge-status-dot ready" id="statusAudioUkDot"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- TAB 3: Oxford Dictionary Explorer -->
+        <section class="tab-panel" id="tab-dictionary">
+          
+          <div class="dict-header-bar">
+            <div class="dict-search-wrapper">
+              <span class="dict-search-icon">🔍</span>
+              <input type="text" class="custom-input search-input" id="searchWords" placeholder="ابحث في 6,207 كلمة بالإنجليزية أو المعنى العربي...">
+            </div>
+            <div class="dict-filter-wrapper">
+              <select class="custom-select level-filter" id="filterLevel">
+                <option value="All">جميع المستويات (All)</option>
+                <option value="A1">A1 — مبتدئ</option>
+                <option value="A2">A2 — أساسي</option>
+                <option value="B1">B1 — متوسط</option>
+                <option value="B2">B2 — فوق المتوسط</option>
+                <option value="C1">C1 — متقدم</option>
+                <option value="C2">C2 — احتراف</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="dict-meta-bar">
+            <span class="dict-count-label" id="dictResultCount">جاري تحميل المفردات...</span>
+          </div>
+
+          <div class="words-stream" id="wordListContainer">
+            <!-- Dynamically populated word cards -->
+          </div>
+
+        </section>
+
+        <!-- TAB 4: Statistics & Progress -->
+        <section class="tab-panel" id="tab-stats">
+          
+          <div class="stats-overview-grid">
+            <div class="stat-card">
+              <div class="stat-icon-wrap blue">📚</div>
+              <div class="stat-content">
+                <span class="stat-number" id="statTotalWords">6,207</span>
+                <span class="stat-label">إجمالي الكلمات المعتمدة</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon-wrap emerald">✅</div>
+              <div class="stat-content">
+                <span class="stat-number emerald" id="statMemorizedWords">0</span>
+                <span class="stat-label">كلمات أتقنتها وحُفظت</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon-wrap amber">🔄</div>
+              <div class="stat-content">
+                <span class="stat-number amber" id="statReviewWords">0</span>
+                <span class="stat-label">قيد المراجعة الدورية</span>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon-wrap purple">🔥</div>
+              <div class="stat-content">
+                <span class="stat-number purple" id="statStreakDays">1</span>
+                <span class="stat-label">أيام التتابع والالتزام</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Danger Zone: Reset -->
+          <div class="glass-card danger-zone" style="margin-top: 24px; max-width: 580px;">
+            <div class="card-header">
+              <div class="card-icon red">⚠️</div>
+              <div>
+                <h3 class="card-title red">إعادة تصفير التقدم وسجل التعلم</h3>
+                <p class="card-desc">مسح كافة الكلمات المحفوظة وقائمة المراجعة للبدء من الصفر</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <button class="btn btn-danger" id="btnResetProgress">
+                <span>إعادة تصفير سجل التعلم بالكامل 🔄</span>
+              </button>
+            </div>
+          </div>
+
+        </section>
+
       </div>
-    </div>
+    </main>
 
-    <!-- Tab 2: Word Explorer / Dictionary -->
-    <div class="tab-content" id="tab-dictionary">
-      <div class="dict-controls">
-        <input type="text" class="form-control search-input" id="searchWords" placeholder="🔍 ابحث عن كلمة إنجليزية أو معنى بالعربية...">
-        <select class="form-control" id="filterLevel" style="width: 170px;">
-          <option value="All">جميع المستويات</option>
-          <option value="A1">A1</option>
-          <option value="A2">A2</option>
-          <option value="B1">B1</option>
-          <option value="B2">B2</option>
-          <option value="C1">C1</option>
-          <option value="C2">C2</option>
-        </select>
-      </div>
+  </div>
 
-      <div class="word-cards-list" id="wordListContainer">
-        <!-- Dynamically injected word rows -->
-      </div>
-    </div>
-
-    <!-- Tab 3: Statistics -->
-    <div class="tab-content" id="tab-stats">
-      <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-val" id="statTotalWords">0</div>
-          <div class="stat-lbl">إجمالي الكلمات في المعجم</div>
-        </div>
-
-        <div class="stat-box">
-          <div class="stat-val" style="color: #10b981;" id="statMemorizedWords">0</div>
-          <div class="stat-lbl">كلمات حُفظت وأُتقنت ✅</div>
-        </div>
-
-        <div class="stat-box">
-          <div class="stat-val" style="color: #f59e0b;" id="statReviewWords">0</div>
-          <div class="stat-lbl">كلمات قيد المراجعة 🔄</div>
-        </div>
-
-        <div class="stat-box">
-          <div class="stat-val" style="color: #818cf8;" id="statStreakDays">1</div>
-          <div class="stat-lbl">أيام الالتزام المستمر 🔥</div>
-        </div>
-      </div>
-
-      <div class="card" style="max-width: 480px; margin-top: 10px;">
-        <div class="card-title" style="color: #ef4444;">⚠️ إدارة البيانات والتقدم</div>
-        <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5;">
-          يمكنك إعادة تصفير قوائم الحفظ والمراجعة للبدء من جديد إذا رغبت في ذلك.
-        </p>
-        <button class="btn-danger" id="btnResetProgress">إعادة تصفير سجل التعلم 🔄</button>
-      </div>
-    </div>
-  </main>
+  <!-- Toast Notification -->
+  <div class="toast-popup" id="toastPopup">تم حفظ التغييرات بنجاح ✅</div>
 
   <script src="tauri-shim.js"></script>
   <script src="settings.js"></script>

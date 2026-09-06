@@ -3,43 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https: data:;">
-  <title>Zad English — Quick Quiz</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https: data: blob:; media-src 'self' https: data: blob:; connect-src 'self' https: data: blob:;">
+  <title>زاد الإنجليزية — اختبار سريع</title>
   <link rel="stylesheet" href="styles/quiz.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Inter:wght@600;700;800&family=Fira+Code:wght@500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
   <div class="shell">
-    <div class="hdr">
-      <div class="hdr-title">
-        <span>🎯 اختبار سريع</span>
+    <!-- Top Drag Bar -->
+    <div class="hdr" data-tauri-drag-region>
+      <div class="hdr-left">
+        <span class="quiz-badge">🎯 اختبار ذكي سريع</span>
         <span class="streak-badge" id="streakBadge">🔥 1</span>
       </div>
-      <button class="btn-cls" id="btnCloseQuiz">✕</button>
+      <button class="btn-cls" id="btnCloseQuiz" title="إغلاق النافذة (Esc)">✕</button>
     </div>
 
+    <!-- Quiz Content Body -->
     <div class="quiz-body">
-      <div>
-        <div class="question-prompt" id="qPrompt">جاري تحميل السؤال...</div>
-        <div style="text-align: center;">
-          <div class="target-badge" id="targetBadge">
-            <span id="targetWordText">...</span>
-            <button class="btn-listen" id="btnAudioQuiz" title="استمع للنطق">🔊</button>
+      
+      <div class="question-header">
+        <div class="question-prompt" id="qPrompt">ما هو المعنى الصحيح للكلمة التالية؟</div>
+        
+        <div class="target-word-container">
+          <span class="target-word-text" id="targetWordText">...</span>
+          
+          <div class="quiz-audio-chips">
+            <button class="quiz-audio-btn" id="btnAudioQuizUs" title="استمع بالنطق الأمريكي البشري">
+              <span>🇺🇸</span>
+              <span class="sound-wave-mini"><i></i><i></i><i></i></span>
+            </button>
+            <button class="quiz-audio-btn" id="btnAudioQuizUk" title="استمع بالنطق البريطاني البشري">
+              <span>🇬🇧</span>
+              <span class="sound-wave-mini"><i></i><i></i><i></i></span>
+            </button>
           </div>
         </div>
       </div>
 
+      <!-- Multiple Choice Grid -->
       <div class="options-grid" id="optionsGrid">
         <!-- 4 Options dynamically injected -->
       </div>
 
+      <!-- Footer Feedback -->
       <div class="quiz-footer">
-        <div class="feedback-msg" id="feedbackMsg">اختر الإجابة الصحيحة</div>
-        <button class="btn-next-q" id="btnNextQuiz" style="display: none;">التالي ⏭</button>
+        <div class="feedback-msg" id="feedbackMsg">اختر الإجابة المناسبة</div>
+        <button class="btn-next-q" id="btnNextQuiz" style="display: none;">
+          <span>السؤال التالي</span>
+          <span>⏭</span>
+        </button>
       </div>
+
     </div>
   </div>
 

@@ -12,8 +12,8 @@
     wordPos: document.getElementById('wordPos'),
     wordPhoneticUs: document.getElementById('wordPhoneticUs'),
     wordPhoneticUk: document.getElementById('wordPhoneticUk'),
-    tagUs: document.getElementById('tagUs'),
-    tagUk: document.getElementById('tagUk'),
+    chipUs: document.getElementById('chipUs'),
+    chipUk: document.getElementById('chipUk'),
     arabicMeaning: document.getElementById('arabicMeaning'),
     englishDef: document.getElementById('englishDef'),
     exampleEn: document.getElementById('exampleEn'),
@@ -22,11 +22,6 @@
     synonymsList: document.getElementById('synonymsList'),
     progFill: document.getElementById('progFill'),
     counterTag: document.getElementById('counterTag'),
-    btnSoundUs: document.getElementById('btnSoundUs'),
-    btnSoundUk: document.getElementById('btnSoundUk'),
-    btnPlayAudio: document.getElementById('btnPlayAudio'),
-    btnFontUp: document.getElementById('btnFontUp'),
-    btnFontDown: document.getElementById('btnFontDown'),
     btnSettings: document.getElementById('btnSettings'),
     btnClose: document.getElementById('btnClose'),
     btnPrev: document.getElementById('btnPrev'),
@@ -43,36 +38,36 @@
     currentConfig = payload.config || {};
 
     const w = payload.word;
-    const stats = payload.stats || {};
     const idx = payload.index || 0;
     const total = payload.total || 1;
 
-    // Apply theme & font size
+    // Apply theme
     document.body.className = currentConfig.theme === 'light' ? 'light' : '';
-    if (currentConfig.fontSize) {
-      el.wordTitle.style.fontSize = (currentConfig.fontSize + 6) + 'px';
-      el.arabicMeaning.style.fontSize = (currentConfig.fontSize) + 'px';
-    }
 
-    // Set Level Badge
-    el.levelBadge.textContent = w.level || 'All';
-    el.levelBadge.className = 'badge-level level-' + (w.level || 'B1');
+    // Set Level Badge with CEFR display
+    const lvl = w.level || 'B1';
+    el.levelBadge.textContent = lvl;
+    el.levelBadge.className = 'badge-level level-' + lvl;
 
-    // Word & phonetics
+    // Word & POS
     el.wordTitle.textContent = w.word;
-    el.wordPos.textContent = w.partOfSpeech || '';
-    el.wordPhoneticUs.textContent = w.phoneticUs || w.phonetic || '';
-    el.wordPhoneticUk.textContent = w.phoneticUk || w.phonetic || '';
+    el.wordPos.textContent = w.partOfSpeech || 'word';
+
+    // Phonetics
+    const usIpa = w.phoneticUs || w.phonetic || '/.../';
+    const ukIpa = w.phoneticUk || w.phonetic || usIpa;
+    el.wordPhoneticUs.textContent = usIpa;
+    el.wordPhoneticUk.textContent = ukIpa;
 
     // Meanings
-    el.arabicMeaning.textContent = w.meaningAr;
-    el.englishDef.textContent = w.definitionEn;
+    el.arabicMeaning.textContent = w.meaningAr || '';
+    el.englishDef.textContent = w.definitionEn || '';
 
-    // Example
-    el.exampleEn.textContent = '“' + w.example + '”';
-    el.exampleAr.textContent = w.exampleAr;
+    // Real-world Example
+    el.exampleEn.textContent = w.example ? `“${w.example}”` : '';
+    el.exampleAr.textContent = w.exampleAr || '';
 
-    // Synonyms
+    // Synonyms Pills
     if (w.synonyms && w.synonyms.length > 0) {
       el.synonymsRow.style.display = 'flex';
       el.synonymsList.innerHTML = '';
@@ -80,7 +75,9 @@
         const span = document.createElement('span');
         span.className = 'syn-pill';
         span.textContent = syn;
-        span.addEventListener('click', () => {
+        span.title = `استمع لنطق ${syn}`;
+        span.addEventListener('click', (e) => {
+          e.stopPropagation();
           Zad.speak(syn, currentConfig.soundVoice || 'en-US', currentConfig.soundRate || 1.0);
         });
         el.synonymsList.appendChild(span);
@@ -92,31 +89,34 @@
     // Progress bar & counter
     const pct = Math.round(((idx + 1) / total) * 100);
     el.progFill.style.width = pct + '%';
-    el.counterTag.textContent = (idx + 1) + ' / ' + total + ' (' + pct + '%)';
+    el.counterTag.textContent = (idx + 1) + ' / ' + total;
 
     // Memorized / Review state styling
     if (payload.isMemorized) {
-      el.btnMemorized.textContent = 'محفوظة ⭐';
-      el.btnMemorized.style.background = '#059669';
+      el.btnMemorized.classList.add('active');
+      el.btnMemorized.querySelector('.txt').textContent = 'محفوظة ✓';
     } else {
-      el.btnMemorized.textContent = 'حفظتها ✅';
-      el.btnMemorized.style.background = '';
+      el.btnMemorized.classList.remove('active');
+      el.btnMemorized.querySelector('.txt').textContent = 'حفظتها';
     }
 
     if (payload.isReview) {
-      el.btnReview.textContent = 'في المراجعة ⏳';
+      el.btnReview.classList.add('active');
+      el.btnReview.querySelector('.txt').textContent = 'في المراجعة';
     } else {
-      el.btnReview.textContent = '🔄 مراجعة';
+      el.btnReview.classList.remove('active');
+      el.btnReview.querySelector('.txt').textContent = 'مراجعة';
     }
 
-    // Auto pronounce if enabled
+    // Auto pronounce if enabled in settings
     if (currentConfig.autoPronounce) {
       setTimeout(() => {
-        pronounce('en-US');
-      }, 350);
+        const voice = currentConfig.soundVoice || 'en-US';
+        Zad.speak(currentWord.word, voice, currentConfig.soundRate || 1.0);
+      }, 400);
     }
 
-    // Reset auto-hide timer
+    // Auto-hide timer
     if (autoHideTimeout) {
       clearTimeout(autoHideTimeout);
     }
@@ -127,19 +127,35 @@
     }
   }
 
-  function pronounce(lang) {
+  // Audio wave indicators listener
+  window.addEventListener('zad:audio_state', (e) => {
+    const detail = e.detail || {};
+    if (detail.playing) {
+      if (detail.dialect === 'uk') {
+        el.chipUk.classList.add('is-playing');
+        el.chipUs.classList.remove('is-playing');
+      } else {
+        el.chipUs.classList.add('is-playing');
+        el.chipUk.classList.remove('is-playing');
+      }
+    } else {
+      el.chipUs.classList.remove('is-playing');
+      el.chipUk.classList.remove('is-playing');
+    }
+  });
+
+  // Human Audio Trigger Handlers
+  el.chipUs.addEventListener('click', () => {
     if (!currentWord) return;
-    const rate = currentConfig.soundRate || 1.0;
-    Zad.speak(currentWord.word, lang || currentConfig.soundVoice || 'en-US', rate);
-  }
+    Zad.speak(currentWord.word, 'en-US', currentConfig.soundRate || 1.0);
+  });
 
-  // Event Listeners
-  el.btnSoundUs.addEventListener('click', () => pronounce('en-US'));
-  el.btnSoundUk.addEventListener('click', () => pronounce('en-GB'));
-  if (el.tagUs) el.tagUs.addEventListener('click', () => pronounce('en-US'));
-  if (el.tagUk) el.tagUk.addEventListener('click', () => pronounce('en-GB'));
-  el.btnPlayAudio.addEventListener('click', () => pronounce(currentConfig.soundVoice || 'en-US'));
+  el.chipUk.addEventListener('click', () => {
+    if (!currentWord) return;
+    Zad.speak(currentWord.word, 'en-GB', currentConfig.soundRate || 1.0);
+  });
 
+  // Navigation Handlers
   el.btnNext.addEventListener('click', () => {
     Zad.invoke('w_next');
   });
@@ -148,6 +164,7 @@
     Zad.invoke('w_prev');
   });
 
+  // Study Action Handlers
   el.btnMemorized.addEventListener('click', () => {
     if (!currentWord) return;
     Zad.invoke('w_memorized', { id: currentWord.id });
@@ -170,24 +187,6 @@
     Zad.invoke('w_hide');
   });
 
-  el.btnFontUp.addEventListener('click', () => {
-    let size = (currentConfig.fontSize || 20) + 2;
-    if (size <= 32) {
-      currentConfig.fontSize = size;
-      el.wordTitle.style.fontSize = (size + 6) + 'px';
-      el.arabicMeaning.style.fontSize = size + 'px';
-    }
-  });
-
-  el.btnFontDown.addEventListener('click', () => {
-    let size = (currentConfig.fontSize || 20) - 2;
-    if (size >= 14) {
-      currentConfig.fontSize = size;
-      el.wordTitle.style.fontSize = (size + 6) + 'px';
-      el.arabicMeaning.style.fontSize = size + 'px';
-    }
-  });
-
   // Keyboard navigation
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -197,18 +196,22 @@
     } else if (e.key === 'ArrowLeft') {
       Zad.invoke('w_prev');
     } else if (e.key === ' ' || e.key === 'p' || e.key === 'P') {
-      pronounce();
+      if (currentWord) {
+        Zad.speak(currentWord.word, currentConfig.soundVoice || 'en-US', currentConfig.soundRate || 1.0);
+      }
     } else if (e.key === 'm' || e.key === 'M') {
       if (currentWord) Zad.invoke('w_memorized', { id: currentWord.id });
+    } else if (e.key === 'r' || e.key === 'R') {
+      if (currentWord) Zad.invoke('w_review', { id: currentWord.id });
     }
   });
 
-  // Receive live updates from Tauri backend
+  // Live updates from Tauri backend
   Zad.listen('word_data', (payload) => {
     renderWord(payload);
   });
 
-  // Inform backend that the widget webview is ready and render initial data
+  // Initial load
   Zad.invoke('widget_ready').then(payload => {
     if (payload) renderWord(payload);
   });
